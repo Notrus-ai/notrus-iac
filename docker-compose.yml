@@ -126,7 +126,6 @@ services:
       - "9093:9093"
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-      - ./alertmanager/templates.tmpl:/etc/alertmanager/templates.tmpl
       - alertmanager_data:/alertmanager
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
