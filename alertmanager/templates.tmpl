@@ -1,0 +1,39 @@
+{{ define "slack.notrus.title" }}
+{{- if eq .Status "firing" -}}
+🚨 ALERT: {{ .CommonLabels.alertname }}
+{{- else -}}
+✅ RESOLVED: {{ .CommonLabels.alertname }}
+{{- end -}}
+{{ end }}
+
+{{ define "slack.notrus.text" }}
+{{ range .Alerts }}
+*Alert:* {{ .Annotations.summary }}
+*Description:* {{ .Annotations.description }}
+*Service:* {{ .Labels.service | default "Unknown" }}
+*Instance:* {{ .Labels.instance | default "N/A" }}
+*Severity:* {{ .Labels.severity }}
+*Status:* {{ .Status }}
+{{- if eq .Status "firing" }}
+*Started:* {{ .StartsAt.Format "2006-01-02 15:04:05 MST" }}
+{{- else }}
+*Resolved:* {{ .EndsAt.Format "2006-01-02 15:04:05 MST" }}
+*Duration:* {{ .EndsAt.Sub .StartsAt }}
+{{- end }}
+---
+{{ end }}
+{{ end }}
+
+{{ define "slack.notrus.color" }}
+{{- if eq .Status "firing" -}}
+{{- if eq .CommonLabels.severity "critical" -}}
+danger
+{{- else if eq .CommonLabels.severity "warning" -}}
+warning
+{{- else -}}
+good
+{{- end -}}
+{{- else -}}
+good
+{{- end -}}
+{{ end }}
