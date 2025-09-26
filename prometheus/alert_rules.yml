@@ -10,36 +10,6 @@ groups:
           summary: "Service {{ $labels.instance }} is down"
           description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minute."
 
-      - alert: HTTPProbeFailed
-        expr: probe_success == 0
-        for: 1m
-        labels:
-          severity: critical
-        annotations:
-          summary: "HTTP probe failed for {{ $labels.instance }}"
-          description: "HTTP probe failed for {{ $labels.instance }} for more than 1 minute."
-
-      - alert: HighResponseTime
-        expr: probe_duration_seconds > 5
-        for: 2m
-        labels:
-          severity: warning
-        annotations:
-          summary: "High response time for {{ $labels.instance }}"
-          description: "HTTP probe duration is {{ $value }}s for {{ $labels.instance }}."
-
-      - alert: LowUptimePercentage
-        expr: |
-          (
-            avg_over_time(up[1h]) < 0.99
-          )
-        for: 5m
-        labels:
-          severity: warning
-        annotations:
-          summary: "Low uptime percentage for {{ $labels.instance }}"
-          description: "{{ $labels.instance }} has uptime of {{ $value | humanizePercentage }} in the last hour."
-
   - name: application.rules
     rules:
       - alert: NotrusAPIDown
@@ -62,12 +32,4 @@ groups:
           summary: "Notrus Web is down"
           description: "The Notrus Web service has been down for more than 30 seconds."
 
-      - alert: NotrusAPIHealthCheckFailed
-        expr: probe_success{instance=~".*:3000/health"} == 0
-        for: 1m
-        labels:
-          severity: critical
-          service: notrus-api
-        annotations:
-          summary: "Notrus API health check failed"
-          description: "Health check for Notrus API has been failing for more than 1 minute."
+

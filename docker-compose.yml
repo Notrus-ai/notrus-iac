@@ -87,22 +87,6 @@ services:
       - notrus-network
     restart: unless-stopped
 
-  blackbox-exporter:
-    image: prom/blackbox-exporter:latest
-    container_name: notrus-blackbox-exporter
-    ports:
-      - "9115:9115"
-    volumes:
-      - type: bind
-        source: ./blackbox.yml
-        target: /etc/blackbox_exporter/config.yml
-        read_only: true
-    command:
-      - '--config.file=/etc/blackbox_exporter/config.yml'
-    networks:
-      - notrus-network
-    restart: unless-stopped
-
   grafana:
     image: grafana/grafana:latest
     container_name: notrus-grafana
@@ -118,15 +102,6 @@ services:
         source: ./grafana/provisioning
         target: /etc/grafana/provisioning
         read_only: true
-    networks:
-      - notrus-network
-    restart: unless-stopped
-
-  prom-aggregation-gateway:
-    image: weaveworks/prom-aggregation-gateway:latest
-    container_name: notrus-prom-aggregation-gateway
-    ports:
-      - "8080:80"
     networks:
       - notrus-network
     restart: unless-stopped
