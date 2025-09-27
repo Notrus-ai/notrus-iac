@@ -50,14 +50,8 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - type: bind
-        source: ./prometheus/prometheus.yml
-        target: /etc/prometheus/prometheus.yml
-        read_only: true
-      - type: bind
-        source: ./prometheus/alert_rules.yml
-        target: /etc/prometheus/alert_rules.yml
-        read_only: true
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -81,10 +75,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
       - grafana_data:/var/lib/grafana
-      - type: bind
-        source: ./grafana/provisioning
-        target: /etc/grafana/provisioning
-        read_only: true
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
     networks:
       - notrus-network
     restart: unless-stopped
@@ -95,14 +86,8 @@ services:
     ports:
       - "9093:9093"
     volumes:
-      - type: bind
-        source: ./alertmanager/alertmanager.yml
-        target: /etc/alertmanager/alertmanager.yml
-        read_only: true
-      - type: bind
-        source: ./alertmanager/templates.tmpl
-        target: /etc/alertmanager/templates.tmpl
-        read_only: true
+      - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+      - ./alertmanager/templates.tmpl:/etc/alertmanager/templates.tmpl:ro
       - alertmanager_data:/alertmanager
     command:
       - '--config.file=/etc/alertmanager/alertmanager.yml'
